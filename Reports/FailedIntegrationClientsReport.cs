@@ -1,6 +1,6 @@
 ﻿namespace IntegrationStatusMonitor.Reports;
 
-internal class FailedIntegrationCliensReport : IReport
+internal class FailedIntegrationClientsReport : IReport
 {
     public string Name => "Lista klientów z niedziałającymi integracjami";
 

@@ -10,7 +10,7 @@ internal class ReportsProvider : IReportsProvider
     {
         return
         [
-            new FailedIntegrationCliensReport(),
+            new FailedIntegrationClientsReport(),
             new NewestErrorWithTotalErrorCountReport(),
             new OrderedErrorsCountReport()
         ];

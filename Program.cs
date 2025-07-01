@@ -6,16 +6,18 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        var userInterface = new UserInterface();
-        var content = userInterface.Run();
+        var pathProvider = new CsvPathsProvider();
+        var filesPaths = pathProvider.GetPaths();
+
+        var selectedPath = ChooseFileFrom(filesPaths);
 
         var csvReader = new CsvReader();
-        var cells = csvReader.ReadAs(content);
+        var cells = csvReader.Read(selectedPath);
 
         var statisticsProvider = new StatisticsProvider();
         var statistics = statisticsProvider.GetStatistics();
 
-        Console.WriteLine("-----------------Statystyki podsumowujące-----------------");
+        Console.WriteLine("\n---------------- Statystyki podsumowujące ----------------");
 
         foreach (var statistic in statistics)
         {
@@ -24,7 +26,7 @@ internal class Program
         }
 
         Console.WriteLine("\n                          ***                            \n");
-        Console.WriteLine("\n-----------------Raport statusu klientów-----------------");
+        Console.WriteLine("\n---------------- Raport statusu klientów ----------------");
 
         var reportsProvider = new Reports.ReportsProvider();
         var reports = reportsProvider.GetReports();
@@ -39,19 +41,25 @@ internal class Program
             }
             Console.WriteLine("\n---------------------------------------------------------");
         }
+        
+    }
+    private static string ChooseFileFrom(string[] filesPaths)
+    {
+        Console.WriteLine("\nZnalezione pliki CSV:");
+        for (int i = 0; i < filesPaths.Length; i++)
+        {
+            Console.WriteLine($"{i + 1}. {Path.GetFileName(filesPaths[i])}");
+        }
 
+        Console.WriteLine("\nWybierz numer pliku do wczytania:");
+        if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > filesPaths.Length)
+        {
+            Console.WriteLine("Nieprawidłowy wybór.");
+            return ChooseFileFrom(filesPaths);
+        }
 
-        /*foreach (var cell in cells)
-        //{
-        //    Console.WriteLine(
-        //        $"{cell.Timestamp} " +
-        //        $"{cell.CustomerId} " +
-        //        $"{cell.CustomerName} " +
-        //        $"{cell.IntegrationType} " +
-        //        $"{cell.Status} " +
-        //        $"{cell.ErrorMessage}"
-        //    );
-        //}
-        */
+        string selectedFile = filesPaths[choice - 1];
+        Console.WriteLine($"\nWczytywanie pliku: {Path.GetFileName(selectedFile)}\n");
+        return selectedFile;
     }
 }

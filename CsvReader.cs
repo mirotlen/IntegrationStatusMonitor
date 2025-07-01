@@ -1,13 +1,18 @@
 ﻿namespace IntegrationStatusMonitor;
 public interface ICsvReader
 {
-    IReadOnlyList<IntegrationLog> ReadAs(string[] content, char separator = ',');
+    IReadOnlyList<IntegrationLog> Read(string path, char separator = ',');
 }
 
 internal class CsvReader : ICsvReader
 {
-    public IReadOnlyList<IntegrationLog> ReadAs(string[] content, char separator = ',')
+    public IReadOnlyList<IntegrationLog> Read(string path, char separator = ',')
     {
+        var content = ReadFile(path);
+        if (content.Length == 0)
+        {
+            return [];
+        }
         var csvHeaders = content.First().Split(separator);
         var rows = content.Skip(1).ToArray();
 
@@ -19,7 +24,7 @@ internal class CsvReader : ICsvReader
 
             if (cells.Length < csvHeaders.Length)
             {
-                throw new ArgumentException(); // edit nspisać text do exeptiona
+                throw new InvalidOperationException("Liczba nagłówków nie odpowiada liczbie kolumn w wierszu.");
             }
 
             logs.Add(new IntegrationLog(
@@ -33,5 +38,22 @@ internal class CsvReader : ICsvReader
         }
 
         return logs;
+    }
+    private string[] ReadFile(string file)
+    {
+        try
+        {
+            if (!File.Exists(file))
+            {
+                return [];
+            }
+            var result = File.ReadAllLines(file);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd podczas wczytywania pliku: {ex.Message}");
+            return [];
+        }
     }
 }

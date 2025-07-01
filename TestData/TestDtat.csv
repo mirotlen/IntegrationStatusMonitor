@@ -1,0 +1,6 @@
+Timestamp,CustomerId,CustomerName,IntegrationType,Status,ErrorMessage
+2025-06-27 10:00:00,101,TechCorp,WMS,Success,
+2025-06-27 10:05:00,102,RetailPlus,Courier,Failed,Connection timeout
+2025-06-27 10:10:00,101,TechCorp,WMS,Failed,Invalid API response
+2025-06-27 10:15:00,103,MegaStore,Sales,Success,
+2025-06-27 10:20:00,102,RetailPlus,Courier,Failed,SSL certificate error

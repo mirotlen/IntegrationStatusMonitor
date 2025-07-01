@@ -1,13 +1,21 @@
-﻿using System.Dynamic;
+﻿namespace IntegrationStatusMonitor;
 
 public class UserInterface
 {
+    private const string defaulRelativePathtoTestCsv = "TestData";
 
     public string[] Run()
     {
-        //string folderPath = GetPath();
-        //string[] csvFiles = GetFiles(folderPath);
-        string[] csvFiles = GetFiles("C:\\Users\\vikto\\source\\repos\\IntegrationStatusMonitor\\TestData");
+        string[] csvFiles = [];
+
+        csvFiles = GetFiles(defaulRelativePathtoTestCsv);
+
+        if (csvFiles.Length == 0)
+        {
+            string folderPath = GetPath();
+            csvFiles = GetFiles(folderPath);
+        }
+
         string selectedFile = ChooseFileFrom(csvFiles);
         var result = ReadFile(selectedFile);
         return result;
@@ -16,19 +24,19 @@ public class UserInterface
     {
         Console.WriteLine("Podaj ścieżkę do folderu z plikami .csv:");
 
-        string folderPath = Console.ReadLine(); //trim?
+        string folderPath = Console.ReadLine();
 
         if (!Directory.Exists(folderPath))
         {
             Console.WriteLine("Podana ścieżka nie istnieje.");
-            GetPath();
+            return GetPath();
         }
 
         return folderPath;
     }
-    private string[] GetFiles(string folderPath, string searchPattern="*.csv") //dać defaultową ścieżkę
+    private string[] GetFiles(string folderPath, string searchPattern = "*.csv") //dać defaultową ścieżkę
     {
-        string[] csvFiles = Directory.GetFiles(folderPath, "*.csv");
+        string[] csvFiles = Directory.GetFiles(folderPath, searchPattern);
         if (csvFiles.Length == 0)
         {
             Console.WriteLine("Nie znaleziono plików CSV w podanym folderze.");
@@ -48,7 +56,7 @@ public class UserInterface
         if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > csvFiles.Length)
         {
             Console.WriteLine("Nieprawidłowy wybór.");
-            Console.WriteLine("\nWybierz numer pliku do wczytania:");
+            ChooseFileFrom(csvFiles);
         }
 
         string selectedFile = csvFiles[choice - 1]; // handle index out of range
@@ -59,7 +67,7 @@ public class UserInterface
     {
         try
         {
-            if(file == null || !File.Exists(file)){
+            if (file == null || !File.Exists(file)) {
                 return new string[0];
             }
             var result = File.ReadAllLines(file); // edit
@@ -70,5 +78,6 @@ public class UserInterface
             Console.WriteLine($"Błąd podczas wczytywania pliku: {ex.Message}");
             return new string[0];
         }
-    }
+    } 
 }
+

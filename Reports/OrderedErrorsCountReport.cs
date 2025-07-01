@@ -8,7 +8,7 @@ internal class OrderedErrorsCountReport : IReport
     {
         var sortedErrors = logs
             .Where(l => !l.IsSuccess)
-            .GroupBy(l => l.CustomerName)
+            .GroupBy(l => l.ErrorMessage!)
             .OrderByDescending(g => g.Count())
             .ToDictionary(l => l.Key, v => v.ToList());
 
@@ -16,7 +16,7 @@ internal class OrderedErrorsCountReport : IReport
         foreach (var item in sortedErrors)
         {
             var errors = String.Join(", ", item.Value.Select(f => f.ErrorMessage).Count());
-            report.Add($"Klient - {item.Key}:  Ilość błędów: {errors}");
+            report.Add($"Error message - {item.Key}:  Liczba wystąpień: {errors}");
         }
         return report;
     }

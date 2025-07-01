@@ -14,7 +14,7 @@ internal class FailedIntegrationClientsReport : IReport
         var report = new List<string>();
         foreach (var item in uniqueCustomersWithErrors)
         {
-            var failedIntegrations = String.Join(", ", item.Value.Select(f => f.IntegrationType));
+            var failedIntegrations = String.Join(", ", item.Value.Select(f => f.IntegrationType).Distinct());
             report.Add($"Klient - {item.Key};  Niedziałające integracje: {failedIntegrations}");
         }
 

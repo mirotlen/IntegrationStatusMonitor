@@ -4,3 +4,34 @@ Timestamp,CustomerId,CustomerName,IntegrationType,Status,ErrorMessage
 2025-06-27 10:10:00,101,TechCorp,WMS,Failed,Invalid API response
 2025-06-27 10:15:00,103,MegaStore,Sales,Success,
 2025-06-27 10:20:00,102,RetailPlus,Courier,Failed,SSL certificate error
+2025-06-27 10:00:00,101,TechCorp,WMS,Success,
+2025-06-27 10:05:00,102,RetailPlus,Courier,Failed,Connection timeout
+2025-06-27 10:10:00,101,TechCorp,WMS,Failed,Invalid API response
+2025-06-27 10:15:00,103,MegaStore,Sales,Success,
+2025-06-27 10:20:00,102,RetailPlus,Courier,Failed,SSL certificate error
+2025-06-27 10:25:00,104,QuickShop,WMS,Success,
+2025-06-27 10:30:00,105,ElectroWorld,Sales,Failed,Authentication failed
+2025-06-27 10:35:00,106,FashionNow,Courier,Success,
+2025-06-27 10:40:00,101,TechCorp,WMS,Success,
+2025-06-27 10:45:00,104,QuickShop,Sales,Failed,Invalid credentials
+2025-06-27 10:50:00,103,MegaStore,Courier,Success,
+2025-06-27 10:55:00,105,ElectroWorld,WMS,Failed,Timeout while reading response
+2025-06-27 11:00:00,106,FashionNow,Sales,Success,
+2025-06-27 11:05:00,102,RetailPlus,Courier,Failed,Connection refused
+2025-06-27 11:10:00,101,TechCorp,Sales,Success,
+2025-06-27 11:15:00,104,QuickShop,Courier,Failed,Invalid tracking number
+2025-06-27 11:20:00,103,MegaStore,WMS,Success,
+2025-06-27 11:25:00,105,ElectroWorld,Sales,Success,
+2025-06-27 11:30:00,106,FashionNow,Courier,Failed,Rate limit exceeded
+2025-06-27 11:35:00,102,RetailPlus,WMS,Success,
+2025-06-27 11:40:00,101,TechCorp,Courier,Failed,Internal server error
+2025-06-27 11:45:00,104,QuickShop,WMS,Success,
+2025-06-27 11:50:00,105,ElectroWorld,Courier,Success,
+2025-06-27 11:55:00,106,FashionNow,Sales,Failed,API key expired
+2025-06-27 12:00:00,103,MegaStore,Courier,Success,
+2025-06-27 12:05:00,102,RetailPlus,Sales,Failed,Invalid response format
+2025-06-27 12:10:00,101,TechCorp,WMS,Success,
+2025-06-27 12:15:00,104,QuickShop,Courier,Success,
+2025-06-27 12:20:00,105,ElectroWorld,WMS,Failed,Database error
+2025-06-27 12:25:00,106,FashionNow,Sales,Success,
+2025-06-27 12:30:00,106,FashionNow,Sales,Failed,Connection timeout

@@ -28,7 +28,7 @@ internal class CsvReader : ICsvReader
                 cells[2],
                 cells[3],
                 cells[4],
-                String.IsNullOrEmpty(cells[5]) ? cells[5] : null
+                String.IsNullOrEmpty(cells[5]) ? null : cells[5]
             ));
         }
 

@@ -16,7 +16,7 @@ internal class NewestErrorWithTotalErrorCountReport : IReport
         {
             $"Łączna liczba błędów: {errorCount}",
             newestError != null
-                ? $"Najnowszy błąd: {newestError.ErrorMessage} Klient: {newestError.CustomerName}, Integracja: {newestError.IntegrationType}, Czas: {newestError.Timestamp})"
+                ? $"Najnowszy błąd: {newestError.ErrorMessage};  Klient: {newestError.CustomerName};  Integracja: {newestError.IntegrationType};  Czas: {newestError.Timestamp}"
                 : "Najnowszy błąd: brak"
         };
         return report;

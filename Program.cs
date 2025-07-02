@@ -5,9 +5,11 @@ namespace IntegrationStatusMonitor;
 
 internal partial class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
-        var pathProvider = new CsvPathsProvider();
+        var defaulPathProvider = new DefaultPathProvider();
+
+        var pathProvider = new CsvFilesPathsProvider(defaulPathProvider);
         var filesPaths = pathProvider.GetPaths();
 
         var selectedPath = ChooseFileFrom(filesPaths);
@@ -24,10 +26,14 @@ internal partial class Program
 
         Console.WriteLine("\n---------------- Statystyki podsumowujące ----------------");
 
+        List<string> textResults = [];
+
         foreach (var statistic in statistics)
         {
-            Console.WriteLine($"\n{statistic.Name}: {statistic.GetStatistic(filteredCells)}");
+            var result = $"{statistic.Name}: {statistic.GetStatistic(filteredCells)}";
+            Console.WriteLine($"\n{result}");
             Console.WriteLine("\n---------------------------------------------------------");
+            textResults.Add(result);
         }
 
         Console.WriteLine("\n                          ***                            \n");
@@ -38,15 +44,31 @@ internal partial class Program
         
         foreach (var report in reports)
         {
+            textResults.Add(report.Name);
             Console.WriteLine($"\n{report.Name} \n");
             var reportContent = report.GetReport(filteredCells);
             foreach (var line in reportContent)
             {
+                textResults.Add(line);
                 Console.WriteLine($"* {line}");
             }
-            Console.WriteLine("\n---------------------------------------------------------");
+            Console.WriteLine("\n---------------------------------------------------------\n");
         }
         
+        Console.WriteLine("Exportuj wyniki do pliku CSV? (T/N): ");
+        var choice = Console.ReadLine().ToUpperInvariant();
+        switch (choice)
+        {
+            case "T":
+                var reportExporter = new ReportsExporter(defaulPathProvider);
+                var resultsPath = await reportExporter.ExportAsync(textResults);
+                Console.WriteLine($"\nWyniki zostały wyeksportowane do pliku: {resultsPath}");
+                break;
+            case "N":
+                break;
+            default:
+                break;
+        }
     }
     private static string ChooseFileFrom(string[] filesPaths)
     {

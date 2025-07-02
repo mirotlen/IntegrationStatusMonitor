@@ -1,17 +1,22 @@
 ﻿namespace IntegrationStatusMonitor;
 
-public interface ICsvPathsProvider
+public interface ICsvFilesPathsProvider
 {
     string[] GetPaths();
 }
-internal class CsvPathsProvider : ICsvPathsProvider
+internal class CsvFilesPathsProvider : ICsvFilesPathsProvider
 {
-    private const string defaulRelativePathtoTestCsv = "TestData";
+    private readonly IDefaultPathProvider _defaultPathProvider;
     private const string searchPattern = "*.csv";
+
+    public CsvFilesPathsProvider(IDefaultPathProvider defaultPathProvider)
+    {
+        _defaultPathProvider = defaultPathProvider;
+    }
 
     public string[] GetPaths()
     {
-        var filesExist = TryGetPaths(defaulRelativePathtoTestCsv, out var csvFilesPaths);
+        var filesExist = TryGetPaths(_defaultPathProvider.GetPath(), out var csvFilesPaths);
 
         while (!filesExist)
         {
@@ -28,7 +33,7 @@ internal class CsvPathsProvider : ICsvPathsProvider
 
         if (folderExists)
         {
-            csvFilesPaths = Directory.GetFiles(defaulRelativePathtoTestCsv, searchPattern);
+            csvFilesPaths = Directory.GetFiles(_defaultPathProvider.GetPath(), searchPattern);
             if (csvFilesPaths.Length > 0)
             {
                 return true;

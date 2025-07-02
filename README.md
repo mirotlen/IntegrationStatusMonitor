@@ -13,6 +13,12 @@ git clone https://github.com/mirotlen/IntegrationStatusMonitor.git
 
 3. **Uruchom aplikację**
 
+5. **Wybierz plik do wczytania**
+
+7. **(Opcjonalnie) Podaj zakres dat**
+- Aby pominąć ten krok, wystarczy nacisnąć `Enter` bez wpisywania daty.
+- Obsługiwany format daty: `dd.MM.yyyy` (np. `01.07.2025`).
+
 ## Wynik działania aplikacji
 
 ![image](https://github.com/user-attachments/assets/e0354f69-a20c-40eb-a22b-11776ff903b7)

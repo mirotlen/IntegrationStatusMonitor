@@ -1,8 +1,9 @@
 ﻿using IntegrationStatusMonitor.Statistics;
+using System.Globalization;
 
 namespace IntegrationStatusMonitor;
 
-internal class Program
+internal partial class Program
 {
     static void Main(string[] args)
     {
@@ -11,8 +12,12 @@ internal class Program
 
         var selectedPath = ChooseFileFrom(filesPaths);
 
+        var dateRange = GetDatesFromUser();
+
         var csvReader = new CsvReader();
         var cells = csvReader.Read(selectedPath);
+
+        var filteredCells = Filter(cells, dateRange);
 
         var statisticsProvider = new StatisticsProvider();
         var statistics = statisticsProvider.GetStatistics();
@@ -21,7 +26,7 @@ internal class Program
 
         foreach (var statistic in statistics)
         {
-            Console.WriteLine($"\n{statistic.Name}: {statistic.GetStatistic(cells)}");
+            Console.WriteLine($"\n{statistic.Name}: {statistic.GetStatistic(filteredCells)}");
             Console.WriteLine("\n---------------------------------------------------------");
         }
 
@@ -34,7 +39,7 @@ internal class Program
         foreach (var report in reports)
         {
             Console.WriteLine($"\n{report.Name} \n");
-            var reportContent = report.GetReport(cells);
+            var reportContent = report.GetReport(filteredCells);
             foreach (var line in reportContent)
             {
                 Console.WriteLine($"* {line}");
@@ -51,7 +56,7 @@ internal class Program
             Console.WriteLine($"{i + 1}. {Path.GetFileName(filesPaths[i])}");
         }
 
-        Console.WriteLine("\nWybierz numer pliku do wczytania:");
+        Console.Write("\nWybierz numer pliku do wczytania: ");
         if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > filesPaths.Length)
         {
             Console.WriteLine("Nieprawidłowy wybór.");
@@ -59,7 +64,34 @@ internal class Program
         }
 
         string selectedFile = filesPaths[choice - 1];
-        Console.WriteLine($"\nWczytywanie pliku: {Path.GetFileName(selectedFile)}\n");
+        Console.WriteLine($"\nWczytywano plik: {Path.GetFileName(selectedFile)}\n");
         return selectedFile;
+    }
+
+    private static DateRange GetDatesFromUser()
+    {
+        Console.WriteLine("Podaj zakres dat w formacie dd.MM.yyyy lub naciśnij Enter, aby pominąć.");
+        Console.Write("Data początkowa: ");
+        var isDateStart = TryGetDate(out var startDate);
+        Console.Write("Data końcowa: ");
+        var isDateEnd = TryGetDate(out var endDate);
+        return new DateRange(
+            isDateStart ? startDate : DateTime.MinValue,
+            isDateEnd ? endDate : DateTime.MaxValue);
+    }
+    private static bool TryGetDate(out DateTime date)
+    {
+        if (!DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    static IReadOnlyList<IntegrationLog> Filter(IReadOnlyList<IntegrationLog> data, DateRange dateRange)
+    {
+        var result = data.Where(log => log.Timestamp.Date >= dateRange.StartDate && log.Timestamp.Date <= dateRange.EndDate)
+            .ToList();
+        return result;
     }
 }

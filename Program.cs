@@ -17,7 +17,19 @@ internal partial class Program
         var dateRange = GetDatesFromUser();
 
         var csvReader = new CsvReader();
-        var cells = csvReader.Read(selectedPath);
+        IReadOnlyList<IntegrationLog> cells;
+
+        try
+        {
+            cells = csvReader.Read(selectedPath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Wystąpił błąd podczas odczytu pliku CSV:");
+            Console.WriteLine(ex.ToString());
+            Console.WriteLine("Upewnij się, że plik jest poprawnie sformatowany i spróbuj ponownie.");
+            return;
+        }
 
         var filteredCells = Filter(cells, dateRange);
 

@@ -27,8 +27,15 @@ internal class CsvReader : ICsvReader
                 throw new InvalidOperationException("Liczba nagłówków nie odpowiada liczbie kolumn w wierszu.");
             }
 
+            var parsed = DateTime.TryParse(cells[0], out var timestamp);
+
+            if (!parsed)
+            {
+                throw new InvalidOperationException("Kolumna timestamp ma nieprawidlową wartość bądź wartość ma nieprawidłowy format.");
+            }
+
             logs.Add(new IntegrationLog(
-                DateTime.Parse(cells[0]),
+                timestamp,
                 cells[1],
                 cells[2],
                 cells[3],
